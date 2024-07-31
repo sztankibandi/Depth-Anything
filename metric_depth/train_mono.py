@@ -55,6 +55,7 @@ def fix_random_seed(seed: int):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = True
 
+
 def load_ckpt(config, model, checkpoint_dir="./checkpoints", ckpt_type="best"):
     import glob
     import os

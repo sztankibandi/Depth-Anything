@@ -36,6 +36,7 @@ import torch.nn as nn
 import torch.optim as optim
 import wandb
 from tqdm import tqdm
+from torch.utils.tensorboard import SummaryWriter
 
 from zoedepth.utils.config import flatten
 from zoedepth.utils.misc import RunningAverageDict, colorize, colors
@@ -141,6 +142,7 @@ class BaseTrainer:
 
     def train(self):
         print(f"Training {self.config.name}")
+        writer = SummaryWriter()
         if self.config.uid is None:
             self.config.uid = str(uuid.uuid4()).split('-')[-1]
         run_id = f"{dt.now().strftime('%d-%h_%H-%M')}-{self.config.uid}"
@@ -192,6 +194,9 @@ class BaseTrainer:
                 if is_rank_zero(self.config) and self.config.print_losses:
                     pbar.set_description(
                         f"Epoch: {epoch + 1}/{self.config.epochs}. Loop: Train. Losses: {stringify_losses(losses)}")
+                    
+                writer.add_scalar("Train_loss", losses[-1], epoch+1)
+
                 self.scheduler.step()
 
                 if self.should_log and self.step % 50 == 0:
