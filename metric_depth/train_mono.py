@@ -60,6 +60,8 @@ def load_ckpt(config, model, checkpoint_dir="./checkpoints", ckpt_type="best"):
     import glob
     import os
 
+    print("Hello")
+
     from zoedepth.models.model_io import load_wts
 
     if hasattr(config, "checkpoint"):
